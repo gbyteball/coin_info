@@ -3,6 +3,8 @@ import sqlalchemy
 from db_example import show_tables
 from api import getBitcoinPrice, getBittrexPrice, getCoinonePrice, getUSDKRW
 from gevent.wsgi import WSGIServer
+from collections import defaultdict
+
 
 app = Flask(__name__)
   
@@ -18,10 +20,35 @@ def about():
 def sql():
   return 'sql version : ' + sqlalchemy.__version__
 
+
+
+
 @app.route('/coin')
 def coin():
   result = show_tables()
-  total_price_init = sum([i['price_init'] for i in result])
+
+  bittrexCoinList = ['ETH', 'XRP', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
+
+  for coindict in result:
+    if bittrexCoinList.count(coindict['code']) == 1:
+      coindict['coin_price'] = getBittrexPrice('BTC', coindict['code'], 'Last')
+    elif coindict['code'] == 'BTC':
+      coindict['coin_price'] = getBitcoinPrice()
+    elif coindict['code'] == 'USD':
+      coindict['coin_price'] = getUSDKRW()
+    else:
+      coindict['coin_price'] = 0
+
+
+# profit_percent
+# profit_value
+# price_now
+# 10kKRW_coin_amount
+# asset_rate
+
+
+
+
 
   pUSD = getUSDKRW()
   pBTC = getBitcoinPrice()
@@ -42,24 +69,13 @@ def coin():
     if pXRPWon == 0:
       pXRPWon = pUSD*pXRP*pBTC
 
-  pPAY = getBittrexPrice('BTC', 'PAY', 'Last')
-  pGBYTE = getBittrexPrice('BTC', 'GBYTE', 'Last')
-  pEDG = getBittrexPrice('BTC', 'EDG', 'Last')
-  pSNT = getBittrexPrice('BTC', 'SNT', 'Last')
-  pADX = getBittrexPrice('BTC', 'ADX', 'Last')
-  pOMG = getBittrexPrice('BTC', 'OMG', 'Last')
-  pDASH = getBittrexPrice('BTC', 'DASH', 'Last')
-  pZEC = getBittrexPrice('BTC', 'ZEC', 'Last')
-  pGNT = getBittrexPrice('BTC', 'GNT', 'Last')
-  pNXT = getBittrexPrice('BTC', 'NXT', 'Last')
-  pSTRAT = getBittrexPrice('BTC', 'STRAT', 'Last')
-  pQTUM = getBittrexPrice('BTC', 'QTUM', 'Last')
-  pKMD = getBittrexPrice('BTC', 'KMD', 'Last')
-  pNMR = getBittrexPrice('BTC', 'NMR', 'Last')
-
+  total_price_init = sum([i['price_init'] for i in result])
   refreshSec = request.args.get('refresh')
   
-  return render_template('coin.html', result = result, pUSD = pUSD, pBTC = pBTC, pBTCWon = pBTCWon, pETH = pETH, pETHWon = pETHWon, pPAY = pPAY, pGBYTE = pGBYTE, pEDG = pEDG, pSNT = pSNT, pADX = pADX, pOMG = pOMG, pDASH = pDASH, pZEC = pZEC, pGNT = pGNT, pNXT = pNXT, pSTRAT = pSTRAT, pQTUM = pQTUM, pKMD = pKMD, pNMR = pNMR, pXRP = pXRP, pXRPWon = pXRPWon, total_price_init = total_price_init, refreshSec = refreshSec)
+  return render_template('coin.html', result = result, pUSD = pUSD, pBTC = pBTC, pBTCWon = pBTCWon, pETH = pETH, pETHWon = pETHWon, pXRP = pXRP, pXRPWon = pXRPWon, total_price_init = total_price_init, refreshSec = refreshSec)
+
+
+
 
 if __name__ == '__main__':
   app.debug=True
