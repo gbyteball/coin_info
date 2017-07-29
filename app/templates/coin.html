@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Coin Info</title>
+      <strong><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></strong>
+      {% if refreshSec > 0 %}
+        <meta http-equiv="refresh" content={{ refreshSec }}>
+      {% endif %}
+  </head>
+  <body>
+    <div class="container">
+      {% block content %}
+          <div class="coin_table">
+            <table>
+                <tr class='hidden'>
+                    <td class='hidden' width='48'></td>
+                    <td class='hidden' width='40'></td>
+                    <td class='hidden' width='50'></td>
+                    <td class='number' width='50'>{{ "{:,.0f}".format(total_price_init) }}</td>
+                    <td class='hidden' width='170'></td>
+                    <td class='hidden' width='40'></td>
+                    <td class='hidden' width='30'></td>
+                    <td class='hidden' width='30'></td>
+                    <td class='hidden' width='80'></td>
+                    <td class='hidden' width='60'></td>
+                    <td class='hidden' width='40'></td>
+<!--                    <td class='hidden' width='16'></td>-->
+<!--                    <td class='hidden' width='30'></td>-->
+                    <td class='hidden' width='200'></td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>수익율</td>
+                    <td>수익</td>
+                    <td>투자액</td>
+                    <td>현재가</td>
+                    <td>위치</td>
+                    <td>10만원개수</td>
+                    <td>비중</td>
+                    <td>Coin 개수</td>
+                    <td>현재금액</td>
+                    <td>code</td>
+<!--                    <td>image</td>-->
+<!--                    <td>id</td>-->
+                    <td>메모</td>
+                </tr>
+
+                {% for item in result %}
+		    {% if item.place == 'btcWlt1' or item.place == 'btcWlt2' or item.place == 'mew1' or item.place == 'mew2' or item.place == 'bbWlt' or item.place == 'tWlt' or item.place == 'dWlt' or item.place == 'sWlt' %}
+		    <tr class='wallet'>
+		    {% else %}
+		    <tr>
+                    {% endif %}
+                        <td>
+                            {% if item.place == 'bittrex' or item.place == 'mew1' or item.place == 'mew2' or item.place == 'bbWlt' or item.place == 'btcWlt1' or item.place == 'btcWlt2' %}
+                                {% if item.name != 'Bitcoin' and item.name != 'USD' %}
+                                    <a href='https://www.bittrex.com/Market/Index?MarketName=BTC-{{ item.code }}' target='_blank'>{{ item.name }}</a>
+                                {% elif item.name == 'Bitcoin' %}
+                                    <a href='https://www.bittrex.com/Market/Index?MarketName=USDT-{{ item.code }}' target='_blank'>{{ item.name }}</a>
+                                {% else %}
+                                    {{ item.name }}
+                                {% endif %}
+                            {% else %}
+                                {{ item.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- 수익율 -->
+                            {% if item.amount != 0 and item.price_init != 0 %}
+			      {% if item.name == 'Bitcoin' %}
+				  {{ "{:,.1f}".format(((pBTCWon * item.amount) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Ethereum' %}
+				  {{ "{:,.1f}".format(((pETHWon * item.amount) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'TenX' %}
+				  {{ "{:,.1f}".format(((pPAY*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'ByteBall' %}
+				  {{ "{:,.1f}".format(((pGBYTE*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Edgeless' %}
+				  {{ "{:,.1f}".format(((pEDG*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Status' %}
+				  {{ "{:,.1f}".format(((pSNT*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'AdEx' %}
+				  {{ "{:,.1f}".format(((pADX*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'OmiseGO' %}
+				  {{ "{:,.1f}".format(((pOMG*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Ripple' %}
+				  {{ "{:,.1f}".format(((pXRP*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Dash' %}
+				  {{ "{:,.1f}".format(((pDASH*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Zcash' %}
+				  {{ "{:,.1f}".format(((pZEC*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Golem' %}
+				  {{ "{:,.1f}".format(((pGNT*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Nxt' %}
+				  {{ "{:,.1f}".format(((pNXT*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Stratis' %}
+				  {{ "{:,.1f}".format(((pSTRAT*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Qtum' %}
+				  {{ "{:,.1f}".format(((pQTUM*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Komodo' %}
+				  {{ "{:,.1f}".format(((pKMD*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			      {% if item.name == 'Numeraire' %}
+				  {{ "{:,.1f}".format(((pNMR*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
+			      {% endif %}
+			    {% endif %}
+                        </td>
+                        <td class="number">
+                            <!-- 수익 -->
+                            {% if item.name == 'USD' %}
+                                {{ "{:,.0f}".format((pUSD * item.amount) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Bitcoin' %}
+                                {{ "{:,.0f}".format((pBTCWon * item.amount) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Ethereum' %}
+                                {{ "{:,.0f}".format((pETHWon * item.amount) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'TenX' %}
+                                {{ "{:,.0f}".format((pPAY*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'ByteBall' %}
+                                {{ "{:,.0f}".format((pGBYTE*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Edgeless' %}
+                                {{ "{:,.0f}".format((pEDG*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Status' %}
+                                {{ "{:,.0f}".format((pSNT*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'AdEx' %}
+                                {{ "{:,.0f}".format((pADX*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'OmiseGO' %}
+                                {{ "{:,.0f}".format((pOMG*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Ripple' %}
+                                {{ "{:,.0f}".format((pXRP*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Dash' %}
+                                {{ "{:,.0f}".format((pDASH*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Zcash' %}
+                                {{ "{:,.0f}".format((pZEC*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Golem' %}
+                                {{ "{:,.0f}".format((pGNT*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Nxt' %}
+                                {{ "{:,.0f}".format((pNXT*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Stratis' %}
+                                {{ "{:,.0f}".format((pSTRAT*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Qtum' %}
+                                {{ "{:,.0f}".format((pQTUM*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Komodo' %}
+                                {{ "{:,.0f}".format((pKMD*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                            {% if item.name == 'Numeraire' %}
+                                {{ "{:,.0f}".format((pNMR*item.amount*pBTCWon) - item.price_init) }}
+                            {% endif %}
+                        </td>
+                        <td class="number">{{ "{:,.0f}".format(item.price_init) }}</td>
+                        <td class="numberL">
+                            <!-- 현재가 -->
+                            {% if item.name == 'USD' %}
+                                {{ "{:,.2f}".format(pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Bitcoin' and pUSD != 0 and pBTC != 0 %}
+                                {{ "{:,.0f}".format(pBTCWon) }}원 / 
+                                ({{ "{:,.1f}".format((pBTCWon - (pUSD*pBTC))/(pUSD*pBTC)*100) }}%) / 
+                                {{ "{:,.2f}".format(pBTC) }}$
+                            {% endif %}
+                            {% if item.name == 'Ethereum' and pUSD != 0 and pBTC != 0 and pETH != 0 %}
+                                {{ "{:,.0f}".format(pETHWon) }}원 / 
+                                ({{ "{:,.1f}".format((pETHWon - (pUSD*pBTC*pETH))/(pUSD*pBTC*pETH)*100) }}%)
+                                {{ "{:,.0f}".format(pETH*100000000) }}
+                            {% endif %}
+                            {% if item.name == 'TenX' %}
+                                {{ "{:,.0f}".format(pPAY*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pPAY*pBTC) }}$ / {{ "{:,.0f}".format(pPAY*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'ByteBall' %}
+                                {{ "{:,.0f}".format(pGBYTE*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pGBYTE*pBTC) }}$ / {{ "{:,.0f}".format(pGBYTE*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Edgeless' %}
+                                {{ "{:,.0f}".format(pEDG*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pEDG*pBTC) }}$ / {{ "{:,.0f}".format(pEDG*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Status' %}
+                                {{ "{:,.0f}".format(pSNT*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pSNT*pBTC) }}$ / {{ "{:,.0f}".format(pSNT*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'AdEx' %}
+                                {{ "{:,.0f}".format(pADX*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pADX*pBTC) }}$ / {{ "{:,.0f}".format(pADX*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'OmiseGO' %}
+                                {{ "{:,.0f}".format(pOMG*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pOMG*pBTC) }}$ / {{ "{:,.0f}".format(pOMG*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Ripple' and pUSD != 0 and pBTC != 0 and pXRP != 0 %}
+                                {{ "{:,.0f}".format(pXRPWon) }}원 / 
+                                ({{ "{:,.1f}".format((pXRPWon - (pUSD*pBTC*pXRP))/(pUSD*pBTC*pXRP)*100) }}%)
+                                {{ "{:,.0f}".format(pXRP*100000000) }}                                
+                            {% endif %}
+                            {% if item.name == 'Dash' %}
+                                {{ "{:,.0f}".format(pDASH*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pDASH*pBTC) }}$ / {{ "{:,.0f}".format(pDASH*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Zcash' %}
+                                {{ "{:,.0f}".format(pZEC*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pZEC*pBTC) }}$ / {{ "{:,.0f}".format(pZEC*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Golem' %}
+                                {{ "{:,.0f}".format(pGNT*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pGNT*pBTC) }}$ / {{ "{:,.0f}".format(pGNT*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Nxt' %}
+                                {{ "{:,.0f}".format(pNXT*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pNXT*pBTC) }}$ / {{ "{:,.0f}".format(pNXT*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Stratis' %}
+                                {{ "{:,.0f}".format(pSTRAT*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pSTRAT*pBTC) }}$ / {{ "{:,.0f}".format(pSTRAT*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Qtum' %}
+                                {{ "{:,.0f}".format(pQTUM*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pQTUM*pBTC) }}$ / {{ "{:,.0f}".format(pQTUM*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Komodo' %}
+                                {{ "{:,.0f}".format(pKMD*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pKMD*pBTC) }}$ / {{ "{:,.0f}".format(pKMD*pBTC*pUSD) }}원
+                            {% endif %}
+                            {% if item.name == 'Numeraire' %}
+                                {{ "{:,.0f}".format(pNMR*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(pNMR*pBTC) }}$ / {{ "{:,.0f}".format(pNMR*pBTC*pUSD) }}원
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ item.place }}
+                        </td>
+                        <td>
+                            {% if item.price_init != 0 %}
+                                {{ "{:,.2f}".format(item.amount*100000/item.price_init) }}
+                            {% endif %}
+                        </td>
+                        <td>{{ "{:,.1f}".format(item.price_init/total_price_init*100) }}%</td>
+                        <td class="number">{{ item.amount }}</td>
+                        <td class="number">
+                            <!-- 현재금액 -->                            
+                            {% if item.name == 'USD' %}
+                                {{ "{:,.0f}".format(pUSD * item.amount) }}
+                            {% endif %}
+                            {% if item.name == 'Bitcoin' %}
+                                {{ "{:,.0f}".format(pBTCWon * item.amount) }}
+                            {% endif %}
+                            {% if item.name == 'Ethereum' %}
+                                {{ "{:,.0f}".format(pETHWon * item.amount) }}
+                            {% endif %}
+                            {% if item.name == 'TenX' %}
+                                {{ "{:,.0f}".format(pPAY*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'ByteBall' %}
+                                {{ "{:,.0f}".format(pGBYTE*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Edgeless' %}
+                                {{ "{:,.0f}".format(pEDG*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Status' %}
+                                {{ "{:,.0f}".format(pSNT*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'AdEx' %}
+                                {{ "{:,.0f}".format(pADX*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'OmiseGO' %}
+                                {{ "{:,.0f}".format(pOMG*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Ripple' %}
+                                {{ "{:,.0f}".format(pXRP*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Dash' %}
+                                {{ "{:,.0f}".format(pDASH*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Zcash' %}
+                                {{ "{:,.0f}".format(pZEC*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Golem' %}
+                                {{ "{:,.0f}".format(pGNT*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Nxt' %}
+                                {{ "{:,.0f}".format(pNXT*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Stratis' %}
+                                {{ "{:,.0f}".format(pSTRAT*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Qtum' %}
+                                {{ "{:,.0f}".format(pQTUM*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Komodo' %}
+                                {{ "{:,.0f}".format(pKMD*item.amount*pBTCWon) }}
+                            {% endif %}
+                            {% if item.name == 'Numeraire' %}
+                                {{ "{:,.0f}".format(pNMR*item.amount*pBTCWon) }}
+                            {% endif %}
+                        </td>
+                        <td>{{ item.code }}</td>
+<!--
+                        <td>
+                            {% if item.image_name != '' %}
+                            <img src={{ 'https://files.coinmarketcap.com/static/img/coins/64x64/' + item.image_name + '.png' }} width='16' height='16'>
+                            {% endif %}
+                        </td>
+-->
+<!--                        <td>{{ item.id }}</td>-->
+                        <td class="text">{{ item.memo }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+          </div>
+        {% endblock %}
+    </div>
+  </body>
+</html>
+
