@@ -5,6 +5,7 @@ from api import getBitcoinPrice, getBittrexPrice, getCoinonePrice, getUSDKRW
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
 from bittrex.bittrex import Bittrex
+import json
 
 
 app = Flask(__name__)
@@ -48,8 +49,16 @@ def coin():
 
 
   bPrice = Bittrex()
-  print(Bittrex.get_balances(bPrice))
+  bittrexBalancesDict = Bittrex.get_balances(bPrice)
+  if bittrexBalancesDict['success'] == True:
+    for coindict in result:
+      if coindict['place'] == 'bittrex':
+        for h in bittrexBalancesDict['result']:
+          if coindict['code'] == h['Currency']:
+            coindict['amount'] = h['Balance']
+#            print('amount reset : ', h['Currency'], h['Balance'])
 
+  
 
 
   pUSD = getUSDKRW()
