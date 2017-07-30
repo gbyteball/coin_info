@@ -31,17 +31,16 @@ def coin():
   bittrexCoinList = ['ETH', 'XRP', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
 
   for coindict in result:
-    if bittrexCoinList.count(coindict['code']) == 1:
-      coindict['coin_price'] = getBittrexPrice('BTC', coindict['code'], 'Last')
-    elif coindict['code'] == 'BTC':
+    if coindict['code'] == 'BTC':
       coindict['coin_price'] = getBitcoinPrice()
     elif coindict['code'] == 'USD':
       coindict['coin_price'] = getUSDKRW()
+    elif bittrexCoinList.count(coindict['code']) == 1:
+      coindict['coin_price'] = getBittrexPrice('BTC', coindict['code'], 'Last')
     else:
       coindict['coin_price'] = 0
 
 
-# profit_percent
 # profit_value
 # price_now
 # 10kKRW_coin_amount
@@ -71,6 +70,22 @@ def coin():
     pXRPWon = getCoinonePrice('XRP')
     if pXRPWon == 0:
       pXRPWon = pUSD*pXRP*pBTC
+
+  for coindict in result:
+    if coindict['amount'] != 0 and coindict['price_init'] != 0:
+      if coindict['name'] == 'Bitcoin':
+        coindict['profit_percent'] = "{:,.1f}".format(((pBTCWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100)
+      elif coindict['name'] == 'Ethereum':
+        coindict['profit_percent'] = "{:,.1f}".format(((pETHWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100)
+      elif coindict['name'] == 'Ripple':
+        coindict['profit_percent'] = "{:,.1f}".format(((pXRPWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100)
+      elif coindict['name'] != 'DAO.Casino' and coindict['name'] != 'Tezos':
+        coindict['profit_percent'] = "{:,.1f}".format(((coindict['coin_price'] * coindict['amount'] * pBTCWon) - coindict['price_init'])/coindict['price_init']*100)
+      else:
+        coindict['profit_percent'] = 0
+    else:
+      coindict['profit_percent'] = 0
+
 
   total_price_init = sum([i['price_init'] for i in result])
   refreshSec = request.args.get('refresh')

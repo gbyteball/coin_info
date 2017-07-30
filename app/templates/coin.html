@@ -66,16 +66,8 @@
                         </td>
                         <td>
                             <!-- 수익율 -->
-                            {% if item.amount != 0 and item.price_init != 0 %}
-                              {% if item.name == 'Bitcoin' %}
-                                {{ "{:,.1f}".format(((pBTCWon * item.amount) - item.price_init)/item.price_init*100) }}%
-                              {% elif item.name == 'Ethereum' %}
-                                {{ "{:,.1f}".format(((pETHWon * item.amount) - item.price_init)/item.price_init*100) }}%
-                              {% elif item.name == 'Ripple' %}
-                                {{ "{:,.1f}".format(((pXRPWon * item.amount) - item.price_init)/item.price_init*100) }}%
-                              {% elif item.name != 'Dao.Casino' and item.name != 'Tezos' %}
-                                {{ "{:,.1f}".format(((item.coin_price*item.amount*pBTCWon) - item.price_init)/item.price_init*100) }}%
-                              {% endif %}
+                            {% if item.profit_percent != 0 and item.profit_percent != '' %}
+                                {{ item.profit_percent }}%
                             {% endif %}
                         </td>
                         <td class="number">
@@ -88,7 +80,7 @@
                                 {{ "{:,.0f}".format((pETHWon * item.amount) - item.price_init) }}
                             {% elif item.name == 'Ripple' %}
                                 {{ "{:,.0f}".format((pXRPWon * item.amount) - item.price_init) }}
-                            {% elif item.name != 'Dao.Casino' and item.name != 'Tezos' %}
+                            {% elif item.name != 'DAO.Casino' and item.name != 'Tezos' %}
                                 {{ "{:,.0f}".format((item.coin_price*item.amount*pBTCWon) - item.price_init) }}
                             {% endif %}
                         </td>
@@ -109,7 +101,7 @@
                                 {{ "{:,.0f}".format(pXRPWon) }}원 / 
                                 ({{ "{:,.1f}".format((pXRPWon - (pUSD*pBTC*item.coin_price))/(pUSD*pBTC*item.coin_price)*100) }}%)
                                 {{ "{:,.0f}".format(item.coin_price*100000000) }}                                
-                            {% elif item.name != 'Dao.Casino' and item.name != 'Tezos' %}
+                            {% elif item.name != 'DAO.Casino' and item.name != 'Tezos' %}
                               {{ "{:,.0f}".format(item.coin_price*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(item.coin_price*pBTC) }}$ / {{ "{:,.0f}".format(item.coin_price*pBTC*pUSD) }}원
                             {% endif %}
                         </td>
@@ -133,7 +125,7 @@
                                 {{ "{:,.0f}".format(pETHWon * item.amount) }}
                             {% elif item.name == 'Ripple' %}
                                 {{ "{:,.0f}".format(pXRPWon * item.amount) }}
-                            {% elif item.name != 'Dao.Casino' and item.name != 'Tezos' %}
+                            {% elif item.name != 'DAO.Casino' and item.name != 'Tezos' %}
                               {{ "{:,.0f}".format(item.coin_price*item.amount*pBTCWon) }}
                             {% else %}
                               {{ item.price_init}}
