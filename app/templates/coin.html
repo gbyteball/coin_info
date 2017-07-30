@@ -14,8 +14,8 @@
             <table>
                 <tr class='hidden'>
                     <td class='hidden' width='48'></td>
-                    <td class='hidden' width='40'></td>
-                    <td class='hidden' width='50'></td>
+                    <td width='40'>{{ "{:,.2f}".format(total_profit_value/total_price_init*100) }}%</td>
+                    <td class='number' width='50'>{{ "{:,.0f}".format(total_profit_value) }}</td>
                     <td class='number' width='50'>{{ "{:,.0f}".format(total_price_init) }}</td>
                     <td class='hidden' width='170'></td>
                     <td class='hidden' width='40'></td>
@@ -67,22 +67,12 @@
                         <td>
                             <!-- 수익율 -->
                             {% if item.profit_percent != 0 and item.profit_percent != '' %}
-                                {{ item.profit_percent }}%
+                                {{ "{:,.1f}".format(item.profit_percent) }}%
                             {% endif %}
                         </td>
                         <td class="number">
                             <!-- 수익 -->
-                            {% if item.name == 'USD' %}
-                                {{ "{:,.0f}".format((pUSD * item.amount) - item.price_init) }}
-                            {% elif item.name == 'Bitcoin' %}
-                                {{ "{:,.0f}".format((pBTCWon * item.amount) - item.price_init) }}
-                            {% elif item.name == 'Ethereum' %}
-                                {{ "{:,.0f}".format((pETHWon * item.amount) - item.price_init) }}
-                            {% elif item.name == 'Ripple' %}
-                                {{ "{:,.0f}".format((pXRPWon * item.amount) - item.price_init) }}
-                            {% elif item.name != 'DAO.Casino' and item.name != 'Tezos' %}
-                                {{ "{:,.0f}".format((item.coin_price*item.amount*pBTCWon) - item.price_init) }}
-                            {% endif %}
+                            {{ "{:,.0f}".format(item.profit_value) }}
                         </td>
                         <td class="number">{{ "{:,.0f}".format(item.price_init) }}</td>
                         <td class="numberL">
