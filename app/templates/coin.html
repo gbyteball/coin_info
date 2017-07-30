@@ -46,7 +46,7 @@
                 </tr>
 
                 {% for item in result %}
-                    {% if item.place == 'btcWlt1' or item.place == 'btcWlt2' or item.place == 'mew1' or item.place == 'mew2' or item.place == 'bbWlt' or item.place == 'tWlt' or item.place == 'dWlt' or item.place == 'sWlt' %}
+                    {% if item.iswallet == 'Y' %}
                         <tr class='wallet'>
                     {% else %}
                         <tr>
