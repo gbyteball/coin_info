@@ -4,6 +4,7 @@ from db_example import show_tables
 from api import getBitcoinPrice, getBittrexPrice, getCoinonePrice, getUSDKRW
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
+from bittrex.bittrex import Bittrex
 
 
 app = Flask(__name__)
@@ -47,6 +48,8 @@ def coin():
 # asset_rate
 
 
+  bPrice = Bittrex()
+  print(Bittrex.get_balances(bPrice))
 
 
 
