@@ -4,8 +4,8 @@ from database import Base
 class CoinInfo(Base):
   __tablename__ = 'coin_info'
   id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-  name = Column(String(11))
-  image_name = Column(String(11))
+  name = Column(String(20))
+  image_name = Column(String(20))
   code = Column(String(10))
   place = Column(String(20))
   iswallet = Column(String(2))
