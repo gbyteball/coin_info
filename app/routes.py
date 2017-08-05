@@ -31,7 +31,7 @@ def coin():
 
 
   # coin_price
-  bittrexCoinList = ['ETH', 'XRP', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
+  bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
   for coindict in result:
     if coindict['code'] == 'BTC':
       coindict['coin_price'] = getBitcoinPrice()
