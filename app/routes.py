@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import sqlalchemy
 from db_example import show_tables
-from api import getBitcoinPrice, getBittrexPrice, getCoinonePrice, getUSDKRW
+from api import getBittrexPrice, getUSDKRW
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
 from bittrex.bittrex import Bittrex
@@ -30,18 +30,28 @@ def coin():
   result = show_tables()
 
 
+  pUSD = 0.0
+  pBTC = 0.0
+  pETH = 0.0
+  pXRP = 0.0
+
   # coin_price
   bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
   for coindict in result:
     if coindict['code'] == 'BTC':
-      coindict['coin_price'] = getBitcoinPrice()
-    elif coindict['code'] == 'USD':
+      coindict['coin_price'] = getBittrexPrice('USDT', coindict['code'], 'Last')
+      pBTC = coindict['coin_price']
+    elif coindict['code'] == 'USDT':
       coindict['coin_price'] = getUSDKRW()
+      pUSD = coindict['coin_price']
     elif bittrexCoinList.count(coindict['code']) == 1:
       coindict['coin_price'] = getBittrexPrice('BTC', coindict['code'], 'Last')
+      if coindict['code'] == 'ETH':
+        pETH = coindict['coin_price']
+      elif coindict['code'] == 'XRP':
+        pXRP = coindict['coin_price']
     else:
       coindict['coin_price'] = 0
-
 
 # price_now
 # 10kKRW_coin_amount
@@ -61,24 +71,23 @@ def coin():
   
 
 
-  pUSD = getUSDKRW()
-  pBTC = getBitcoinPrice()
-  pETH = getBittrexPrice('BTC', 'ETH', 'Last')
-  pXRP = getBittrexPrice('BTC', 'XRP', 'Last')
 
-  pBTCWon = getCoinonePrice('BTC')
-  if pBTCWon == 0:
-    pBTCWon = pUSD*pBTC
-    pETHWon = pUSD*pETH*pBTC
-    pXRPWon = pUSD*pXRP*pBTC
-  else:
-    pETHWon = getCoinonePrice('ETH')
-    if pETHWon == 0:
-      pETHWon = pUSD*pETH*pBTC
-      pXRPWon = pUSD*pXRP*pBTC
-    pXRPWon = getCoinonePrice('XRP')
-    if pXRPWon == 0:
-      pXRPWon = pUSD*pXRP*pBTC
+#  pBTCWon = getCoinonePrice('BTC')
+#  if pBTCWon == 0:
+#    pBTCWon = pUSD*pBTC
+#    pETHWon = pUSD*pETH*pBTC
+#    pXRPWon = pUSD*pXRP*pBTC
+#  else:
+#    pETHWon = getCoinonePrice('ETH')
+#    if pETHWon == 0:
+#      pETHWon = pUSD*pETH*pBTC
+#      pXRPWon = pUSD*pXRP*pBTC
+#    pXRPWon = getCoinonePrice('XRP')
+#    if pXRPWon == 0:
+#      pXRPWon = pUSD*pXRP*pBTC
+  pBTCWon = pUSD*pBTC
+  pETHWon = pUSD*pETH*pBTC
+  pXRPWon = pUSD*pXRP*pBTC
 
 
   # profit_percent

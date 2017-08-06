@@ -81,18 +81,18 @@
                                 {{ "{:,.2f}".format(pUSD) }}원
                             {% elif item.name == 'Bitcoin' and pUSD != 0 and pBTC != 0 %}
                                 {{ "{:,.2f}".format(pBTC) }}$ / 
-                                ({{ "{:,.1f}".format((pBTCWon - (pUSD*pBTC))/(pUSD*pBTC)*100) }}%) / 
+<!--                                ({{ "{:,.1f}".format((pBTCWon - (pUSD*pBTC))/(pUSD*pBTC)*100) }}%) / -->
                                 {{ "{:,.0f}".format(pBTCWon) }}원
                             {% elif item.name == 'Ethereum' and pUSD != 0 and pBTC != 0 and pETH != 0 %}
                                 {{ "{:,.0f}".format(pETH*100000000) }} / 
-                                ({{ "{:,.1f}".format((pETHWon - (pUSD*pBTC*pETH))/(pUSD*pBTC*pETH)*100) }}%)
+<!--                                ({{ "{:,.1f}".format((pETHWon - (pUSD*pBTC*pETH))/(pUSD*pBTC*pETH)*100) }}%)-->
                                 {{ "{:,.0f}".format(pETHWon) }}원
                             {% elif item.name == 'Ripple' and pUSD != 0 and pBTC != 0 and item.coin_price != 0 %}
                                 {{ "{:,.0f}".format(item.coin_price*100000000) }} / 
-                                ({{ "{:,.1f}".format((pXRPWon - (pUSD*pBTC*item.coin_price))/(pUSD*pBTC*item.coin_price)*100) }}%)
+<!--                                ({{ "{:,.1f}".format((pXRPWon - (pUSD*pBTC*item.coin_price))/(pUSD*pBTC*item.coin_price)*100) }}%)-->
                                 {{ "{:,.0f}".format(pXRPWon) }}원
                             {% elif item.name != 'DAO.Casino' and item.name != 'Tezos' %}
-                              {{ "{:,.0f}".format(item.coin_price*100000000) }} &nbsp;&nbsp;&nbsp;/ {{ "{:,.2f}".format(item.coin_price*pBTC) }}$ / {{ "{:,.0f}".format(item.coin_price*pBTC*pUSD) }}원
+                              {{ "{:,.0f}".format(item.coin_price*100000000) }} / {{ "{:,.2f}".format(item.coin_price*pBTC) }}$ / {{ "{:,.0f}".format(item.coin_price*pBTC*pUSD) }}원
                             {% endif %}
                         </td>
                         <td>
