@@ -27,8 +27,12 @@ def getBittrexPrice(coin1, coin2, type):
 #  response.text
   response = response.json()
   if response['success'] == True:
+#    multiThreadResult.append(float(response['result'][type]))
+#    return
     return float(response['result'][type])
   else:
+#    multiThreadResult.append(null)
+#    return
     return null
 
 #def getCoinonePrice(coin):

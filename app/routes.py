@@ -6,6 +6,9 @@ from gevent.wsgi import WSGIServer
 from collections import defaultdict
 from bittrex.bittrex import Bittrex
 import json
+import multiprocessing
+from multiprocessing import Process
+
 
 
 app = Flask(__name__)
@@ -35,16 +38,28 @@ def coin():
   pETH = 0.0
   pXRP = 0.0
 
+  procs = []
+  multiThreadResult = list()
+
   # coin_price
   bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
   for coindict in result:
     if coindict['code'] == 'BTC':
+#      p = multiprocessing.Process(target=getBittrexPrice, args=('USDT', coindict['code'], 'Last', multiThreadResult))
+#      procs.append(p)
+#      p.start()
       coindict['coin_price'] = getBittrexPrice('USDT', coindict['code'], 'Last')
       pBTC = coindict['coin_price']
     elif coindict['code'] == 'USDT':
+#      p = multiprocessing.Process(target=getUSDKRW, args=(multiThreadResult))
+#      procs.append(p)
+#      p.start()
       coindict['coin_price'] = getUSDKRW()
       pUSD = coindict['coin_price']
     elif bittrexCoinList.count(coindict['code']) == 1:
+#      p = multiprocessing.Process(target=getBittrexPrice, args=('BTC', coindict['code'], 'Last', multiThreadResult))
+#      procs.append(p)
+#      p.start()
       coindict['coin_price'] = getBittrexPrice('BTC', coindict['code'], 'Last')
       if coindict['code'] == 'ETH':
         pETH = coindict['coin_price']
@@ -52,6 +67,24 @@ def coin():
         pXRP = coindict['coin_price']
     else:
       coindict['coin_price'] = 0
+    
+#  for p in procs:
+#    p.join()
+
+#  print(multiThreadResult)
+#  for coindict in result:
+#    print(result.index(coindict))
+    
+#    coindict['coin_price'] = multiThreadResult[result.index(coindict)]
+#    print(coindict['coin_price'])
+#    if coindict['code'] == 'BTC':
+#      pBTC = coindict['coin_price']
+#    elif coindict['code'] == 'USDT':
+#      pUSD = coindict['coin_price']
+#    elif coindict['code'] == 'ETH':
+#      pETH = coindict['coin_price']
+#    elif coindict['code'] == 'XRP':
+#      pXRP = coindict['coin_price']
 
 # price_now
 # 10kKRW_coin_amount
