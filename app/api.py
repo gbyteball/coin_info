@@ -55,3 +55,41 @@ def getUSDKRW():
   response = response.json()
 #  print response
   return float(response['query']['results']['rate']['Rate'])
+
+
+
+
+def getBittrexPrice2(coin1, coin2, type, q):
+  URL = 'https://bittrex.com/api/v1.1/public/getticker'
+  params = {'market': coin1 + '-' + coin2}
+  headers = {'Connection': 'keep-alive'}
+  try:
+    response = requests.get(URL, headers=headers, params=params, timeout=2)
+  except:
+    q.put([coin2, 0])
+    return 0;
+#  response.status_code
+#  response.text
+  response = response.json()
+  if response['success'] == True:
+    q.put([coin2, float(response['result'][type])])
+    return
+#    return float(response['result'][type])
+  else:
+    q.put([coin2, 0])
+    return
+#    return null
+
+def getUSDKRW2(a, q):
+  URL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22USDKRW%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
+  headers = {'Connection': 'keep-alive'}
+  try:
+    response = requests.get(URL, headers=headers, timeout=1)
+  except:
+    q.put(['USDT', 0])
+    return 0;
+  response = response.json()
+#  print response
+  q.put(['USDT', float(response['query']['results']['rate']['Rate'])])
+  return
+#  return float(response['query']['results']['rate']['Rate'])
