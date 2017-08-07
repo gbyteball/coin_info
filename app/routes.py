@@ -39,7 +39,7 @@ def coin():
   pXRP = 0.0
 
   # coin_price
-  bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
+  bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR', 'NEO', 'ANS']
   for coindict in result:
     if coindict['code'] == 'BTC':
       coindict['coin_price'] = getBittrexPrice('USDT', coindict['code'], 'Last')
@@ -138,7 +138,7 @@ def coin2():
   q = multiprocessing.Queue()
 
   # coin_price
-  bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR']
+  bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR', 'NEO', 'ANS']
   for coindict in result:
     if coindict['code'] == 'BTC':
       p = multiprocessing.Process(target=getBittrexPrice2, args=('USDT', coindict['code'], 'Last', q))
