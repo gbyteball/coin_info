@@ -72,7 +72,10 @@ def getBittrexPrice2(coin1, coin2, type, q):
 #  response.text
   response = response.json()
   if response['success'] == True:
-    q.put([coin2, float(response['result'][type])])
+    if(response['result'][type] is None):
+      q.put([coin2, float(0)])
+    else:
+      q.put([coin2, float(response['result'][type])])
     return
 #    return float(response['result'][type])
   else:
