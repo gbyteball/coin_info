@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import sqlalchemy
 from db_example import show_tables
-from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getUSDKRW2
+from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getBitfinexPrice, getUSDKRW2
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
 from bittrex.bittrex import Bittrex
@@ -138,31 +138,24 @@ def coin2():
   q = multiprocessing.Queue()
 
   # coin_price
-  bittrexCoinList = ['ETH', 'XRP', 'BCC', 'PAY', 'GBYTE', 'EDG', 'SNT', 'ADX', 'OMG', 'DASH', 'ZEC', 'GNT', 'NXT', 'STRAT', 'QTUM', 'KMD', 'NMR', 'NEO', 'ANS']
   for coindict in result:
     if coindict['code'] == 'BTC':
       p = multiprocessing.Process(target=getBittrexPrice2, args=('USDT', coindict['code'], 'Last', q))
       procs.append(p)
       p.start()
-#      coindict['coin_price'] = getBittrexPrice('USDT', coindict['code'], 'Last')
-#      pBTC = coindict['coin_price']
     elif coindict['code'] == 'USDT':
       p = multiprocessing.Process(target=getUSDKRW2, args=('', q))
       procs.append(p)
       p.start()
-#      coindict['coin_price'] = getUSDKRW()
-#      pUSD = coindict['coin_price']
-    elif bittrexCoinList.count(coindict['code']) == 1:
+    elif coindict['place'] == 'bittrex':
       p = multiprocessing.Process(target=getBittrexPrice2, args=('BTC', coindict['code'], 'Last', q))
       procs.append(p)
       p.start()
-#      coindict['coin_price'] = getBittrexPrice('BTC', coindict['code'], 'Last')
-#      if coindict['code'] == 'ETH':
-#        pETH = coindict['coin_price']
-#      elif coindict['code'] == 'XRP':
-#        pXRP = coindict['coin_price']
+    elif coindict['place'] == 'bitfinex':
+      p = multiprocessing.Process(target=getBitfinexPrice, args=('BTC', coindict['code'], 'last_price', q))
+      procs.append(p)
+      p.start()
     else:
-#      coindict['coin_price'] = 0
       q.put([coindict['code'], 0])
     
   for p in procs:
@@ -178,6 +171,8 @@ def coin2():
           pBTC = coindict['coin_price']
         elif coindict['code'] == 'USDT':
           pUSD = coindict['coin_price']
+          if(pUSD == 0):
+	    pUSD = 1125
         elif coindict['code'] == 'ETH':
           pETH = coindict['coin_price']
         elif coindict['code'] == 'XRP':
@@ -262,7 +257,7 @@ def coin2():
       coindict['profit_value'] = int((pETHWon * coindict['amount']) - coindict['price_init'])
     elif coindict['name'] == 'Ripple':
       coindict['profit_value'] = int((pXRPWon * coindict['amount']) - coindict['price_init'])
-    elif coindict['name'] != 'DAO.Casino' and coindict['name'] != 'Tezos':
+    elif coindict['name'] != 'DAO.Casino' and coindict['name'] != 'Tezos' and coindict['coin_price']:
       coindict['profit_value'] = int((coindict['coin_price'] * coindict['amount'] * pBTCWon) - coindict['price_init'])
     else:
       coindict['profit_value'] = 0

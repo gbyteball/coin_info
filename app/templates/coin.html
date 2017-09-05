@@ -60,6 +60,14 @@
                                 {% else %}
                                     {{ item.name }}
                                 {% endif %}
+                            {% elif item.place == 'bitfinex' %}
+                                {% if item.name != 'Bitcoin' and item.name != 'USD' %}
+                                    <a href='https://www.bitfinex.com/trading/{{ item.code }}BTC' target='_blank'>{{ item.name }}</a>
+                                {% elif item.name == 'Bitcoin' %}
+                                    <a href='https://www.bitfinex.com/trading/{{ item.code }}USD' target='_blank'>{{ item.name }}</a>
+                                {% else %}
+                                    {{ item.name }}
+                                {% endif %}
                             {% else %}
                                 {{ item.name }}
                             {% endif %}

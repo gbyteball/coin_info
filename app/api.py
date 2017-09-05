@@ -83,6 +83,25 @@ def getBittrexPrice2(coin1, coin2, type, q):
     return
 #    return null
 
+
+def getBitfinexPrice(coin1, coin2, type, q):
+  URL = 'https://api.bitfinex.com/v1/pubticker/' + coin2 + coin1
+  headers = {'Connection': 'keep-alive'}
+  try:
+    response = requests.get(URL, headers=headers, timeout=2)
+  except:
+    q.put([coin2, 0])
+    return 0;
+#  response.status_code
+#  response.text
+  response = response.json()
+  if(response[type] is None):
+    q.put([coin2, float(0)])
+  else:
+    q.put([coin2, float(response[type])])
+  return
+  
+
 def getUSDKRW2(a, q):
   URL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22USDKRW%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
   headers = {'Connection': 'keep-alive'}
