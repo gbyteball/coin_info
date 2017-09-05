@@ -172,7 +172,7 @@ def coin2():
         elif coindict['code'] == 'USDT':
           pUSD = coindict['coin_price']
           if(pUSD == 0):
-	    pUSD = 1125
+	        pUSD = 1125
         elif coindict['code'] == 'ETH':
           pETH = coindict['coin_price']
         elif coindict['code'] == 'XRP':
@@ -233,7 +233,9 @@ def coin2():
   # profit_percent
   for coindict in result:
     if coindict['amount'] != 0 and coindict['price_init'] != 0:
-      if coindict['name'] == 'Bitcoin':
+      if coindict['name'] == 'USD':
+        coindict['profit_percent'] = ((pUSD * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
+      elif coindict['name'] == 'Bitcoin':
         coindict['profit_percent'] = ((pBTCWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
       elif coindict['name'] == 'Ethereum':
         coindict['profit_percent'] = ((pETHWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
