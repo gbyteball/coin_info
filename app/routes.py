@@ -93,7 +93,7 @@ def coin2():
     for coindict in result:
       if coindict['place'] == 'bittrex':
         for h in bittrexBalancesDict['result']:
-          if coindict['code'] == h['Currency']:
+          if coindict['code'] == h['Currency'] and coindict['iswallet'] == 'N':
             coindict['amount'] = h['Balance']
 #            print('amount reset : ', h['Currency'], h['Balance'])
 
