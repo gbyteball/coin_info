@@ -100,9 +100,14 @@
                                 {{ "{:,.0f}".format(item.coin_price*100000000) }} / 
 <!--                                ({{ "{:,.1f}".format((pXRPWon - (pUSD*pBTC*item.coin_price))/(pUSD*pBTC*item.coin_price)*100) }}%)-->
                                 {{ "{:,.0f}".format(pXRPWon) }}원
-                            {% elif item.name != 'DAO.Casino' and item.name != 'BlackMoon' and item.name != 'Tezos' %}
+                            {% elif item.name == 'DAO.Casino' or item.name == 'BlackMoon' %}
+                              {{ "{:,.0f}".format(item.satoshi) }} / {{ "{:,.2f}".format(0.00000001*item.satoshi*pETH*pBTC) }}$ / {{ "{:,.0f}".format(0.00000001*item.satoshi*pETH*pBTC*pUSD) }}원
+                            {% elif item.name == 'Tezos' or item.name == 'Air' %}
+                              {{ "{:,.0f}".format(item.satoshi) }} / {{ "{:,.2f}".format(0.00000001*item.satoshi*pBTC) }}$ / {{ "{:,.0f}".format(0.00000001*item.satoshi*pBTC*pUSD) }}원
+                            {% else %}
                               {{ "{:,.0f}".format(item.coin_price*100000000) }} / {{ "{:,.2f}".format(item.coin_price*pBTC) }}$ / {{ "{:,.0f}".format(item.coin_price*pBTC*pUSD) }}원
                             {% endif %}
+                            
                         </td>
                         <td>
                             {{ item.place }}
@@ -124,10 +129,12 @@
                                 {{ "{:,.0f}".format(pETHWon * item.amount) }}
                             {% elif item.name == 'Ripple' %}
                                 {{ "{:,.0f}".format(pXRPWon * item.amount) }}
-                            {% elif item.name != 'DAO.Casino' and item.name != 'BlackMoon' and item.name != 'Tezos' %}
-                              {{ "{:,.0f}".format(item.coin_price*item.amount*pBTCWon) }}
+                            {% elif item.name == 'DAO.Casino' or item.name == 'BlackMoon' %}
+                              {{ "{:,.0f}".format(0.00000001*item.satoshi*item.amount*pETHWon) }}
+                            {% elif item.name == 'Tezos' or item.name == 'Air' %}
+                              {{ "{:,.0f}".format(0.00000001*item.satoshi*item.amount*pBTCWon) }}
                             {% else %}
-                              {{ item.price_init}}
+                              {{ "{:,.0f}".format(item.price_init) }}
                             {% endif %}
                         </td>
                         <td>{{ item.code }}</td>

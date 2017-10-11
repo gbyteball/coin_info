@@ -12,8 +12,9 @@ class CoinInfo(Base):
   amount = Column(Float)
   price_init = Column(Integer)
   memo = Column(String(200))
+  satoshi = Column(Integer)
   
-  def __init__(self, name, image_name, code, place, iswallet, amount, price_init, memo):
+  def __init__(self, name, image_name, code, place, iswallet, amount, price_init, memo, satoshi):
     self.name = name
     self.image_name = image_name
     self.code = code
@@ -22,6 +23,7 @@ class CoinInfo(Base):
     self.amount = amount
     self.price_init = price_init
     self.memo = memo
+    self.satoshi = satoshi
     
   def __repr__(self):
-    return "<CoinInfo('%d', '%s', '%s', '%s', '%s', '%s', '%f', '%d','%s'>" %(self.id, self.name, self.image_name, self.code, self.place, self.iswallet, self.amount, self.price_init, self.memo)
+    return "<CoinInfo('%d', '%s', '%s', '%s', '%s', '%s', '%f', '%d','%s', '%d'>" %(self.id, self.name, self.image_name, self.code, self.place, self.iswallet, self.amount, self.price_init, self.memo, self.satoshi)

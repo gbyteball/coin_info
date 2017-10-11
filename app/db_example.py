@@ -5,7 +5,7 @@ from models import CoinInfo
 def show_tables():
   queries = db_session.query(CoinInfo)
 #  queries = db_session.query(CoinInfo).filter_by(id='11').first() 
-  entries = [dict(id=q.id, name=q.name, image_name=q.image_name, code=q.code, place=q.place, iswallet=q.iswallet, amount=q.amount, price_init=q.price_init, memo=q.memo) for q in queries]
+  entries = [dict(id=q.id, name=q.name, image_name=q.image_name, code=q.code, place=q.place, iswallet=q.iswallet, amount=q.amount, price_init=q.price_init, memo=q.memo, satoshi=q.satoshi) for q in queries]
   db_session.close()
   return entries
 
