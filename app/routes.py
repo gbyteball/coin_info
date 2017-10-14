@@ -9,7 +9,6 @@ import json
 import multiprocessing
 from multiprocessing import Process, Queue
 
-
 app = Flask(__name__)
   
 @app.route('/coin2')
@@ -59,9 +58,9 @@ def coin2():
         if coindict['code'] == 'BTC':
           pBTC = coindict['coin_price']
         elif coindict['code'] == 'USDT':
-          pUSD = coindict['coin_price']
+          pUSD = coindict['satoshi']
           if(pUSD == 0):
-	        pUSD = 1140.2
+	        pUSD = 0
         elif coindict['code'] == 'ETH':
           pETH = coindict['coin_price']
         elif coindict['code'] == 'XRP':
@@ -99,8 +98,6 @@ def coin2():
 
 
 
-
-
 #  pBTCWon = getCoinonePrice('BTC')
 #  if pBTCWon == 0:
 #    pBTCWon = pUSD*pBTC
@@ -124,6 +121,8 @@ def coin2():
     if coindict['amount'] != 0 and coindict['price_init'] != 0:
       if coindict['name'] == 'USD':
         coindict['profit_percent'] = ((pUSD * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
+      elif coindict['name'] == 'KRW':
+        coindict['profit_percent'] = ((1 * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
       elif coindict['name'] == 'Bitcoin':
         coindict['profit_percent'] = ((pBTCWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
       elif coindict['name'] == 'Ethereum':
@@ -144,6 +143,8 @@ def coin2():
   for coindict in result:
     if coindict['name'] == 'USD':
       coindict['profit_value'] = int((pUSD * coindict['amount']) - coindict['price_init'])
+    elif coindict['name'] == 'KRW':
+      coindict['profit_value'] = int((1 * coindict['amount']) - coindict['price_init'])
     elif coindict['name'] == 'Bitcoin':
       coindict['profit_value'] = int((pBTCWon * coindict['amount']) - coindict['price_init'])
     elif coindict['name'] == 'Ethereum':

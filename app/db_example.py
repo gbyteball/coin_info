@@ -29,6 +29,10 @@ def update_price_init(id1, id2, price_init1, price_init2):
 def update_id(id1, id2):
   db_session.query(CoinInfo).filter(CoinInfo.id==id1).update(dict(id=id2))
   db_session.commit()
+
+def update_satoshi(code, satoshi):
+  db_session.query(CoinInfo).filter(CoinInfo.code==code).update(dict(satoshi=satoshi))
+  db_session.commit()
   
 def delete_entry(datetime, string):
   db_session.query(CoinInfo).filter(CoinInfo.datetime==datetime, CoinInfo.string==string).delete()

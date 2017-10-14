@@ -88,6 +88,8 @@
                             <!-- 현재가 -->
                             {% if item.name == 'USD' %}
                                 {{ "{:,.2f}".format(pUSD) }}원
+                            {% elif item.name == 'KRW' %}
+                                {{ "{:,.2f}".format(1) }}원
                             {% elif item.name == 'Bitcoin' and pUSD != 0 and pBTC != 0 %}
                                 {{ "{:,.2f}".format(pBTC) }}$ / 
 <!--                                ({{ "{:,.1f}".format((pBTCWon - (pUSD*pBTC))/(pUSD*pBTC)*100) }}%) / -->
