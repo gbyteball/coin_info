@@ -7,7 +7,7 @@ import hmac
 
 bitfinexURL = 'https://api.bitfinex.com/v1/balances'
 
-def getBitfinexBalance():
+def getBitfinexBalances():
     
     with open("secrets.json") as secrets_file:
       secrets = json.load(secrets_file)
@@ -42,6 +42,33 @@ def getBitfinexBalance():
     #print('Response Code: ' + str(r.status_code))
     #print('Response Header: ' + str(r.headers))
     #print('Response Content: '+ str(r.content))
-    return str(r.content)
+    if(str(r.status_code) == '200'):
+#      return r.content
+       return r.json()
+    else:
+      return null
+
+
+def getBitfinexBalance(bitfinexBalancesDict, coin, type):
+  #print([d for d in bitfinexBalancesDict])
+
+  if(bitfinexBalancesDict is None):
+    print('is null')
+  else:
+    returnVal = 0.0
     
-#getBitfinexBalance()
+#    print((item for item in bitfinexBalancesDict).next())
+    for item in bitfinexBalancesDict:
+#      print(' ' + item['type'] + ' ' + item['currency'] + ' ' + item['amount'])
+      if(type == 'exchange'):
+        if(item['currency'] == coin and (item['type'] == 'exchange' or item['type'] == 'trading')):
+          returnVal = returnVal + float(item['amount'])
+      elif(type == 'lending'):
+        if(item['currency'] == coin and item['type'] == 'deposit'):
+          returnVal = returnVal + float(item['amount'])
+    
+#    print(returnVal)
+    return returnVal
+
+#getBitfinexBalance(getBitfinexBalances(), 'btc', 'exchange')
+#getBitfinexBalance(getBitfinexBalances(), 'btc', 'margin')

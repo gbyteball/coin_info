@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import sqlalchemy
 from db_example import show_tables
 from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getBitfinexPrice, getUSDKRW2
-from bitfinex import getBitfinexBalance
+from bitfinex import getBitfinexBalances, getBitfinexBalance
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
 from bittrex.bittrex import Bittrex
@@ -42,7 +42,7 @@ def coin2():
       p = multiprocessing.Process(target=getBittrexPrice2, args=('BTC', coindict['code'], 'Last', q))
       procs.append(p)
       p.start()
-    elif coindict['place'] == 'bitfinex':
+    elif coindict['place'] == 'bitfinex' or coindict['place'] == 'bitfinex_l':
       p = multiprocessing.Process(target=getBitfinexPrice, args=('BTC', coindict['code'], 'last_price', q))
       procs.append(p)
       p.start()
@@ -100,8 +100,15 @@ def coin2():
 #            print('amount reset : ', h['Currency'], h['Balance'])
 
 
-  #print(getBitfinexBalance())
-
+  bitfinexBalancesDict = getBitfinexBalances()
+  if(bitfinexBalancesDict is None):
+    print('is null')
+  else:
+    for coindict in result:
+      if coindict['place'] == 'bitfinex' and coindict['iswallet'] == 'N':
+        coindict['amount'] = getBitfinexBalance(bitfinexBalancesDict, coindict['code'].lower(), 'exchange')
+      elif coindict['place'] == 'bitfinex_l':
+        coindict['amount'] = getBitfinexBalance(bitfinexBalancesDict, coindict['code'].lower(), 'lending')
 
 #  pBTCWon = getCoinonePrice('BTC')
 #  if pBTCWon == 0:
