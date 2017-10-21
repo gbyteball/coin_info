@@ -26,8 +26,8 @@ def getBittrexPrice(coin1, coin2, type):
 #  response.status_code
 #  response.text
   response = response.json()
-  if response['success'] == True:
-    return float(response['result'][type])
+  if response.get('success') == True:
+    return float(response.get('result').get(type))
   else:
     return null
 
@@ -54,7 +54,7 @@ def getUSDKRW():
     return 0;
   response = response.json()
 #  print response
-  return float(response['query']['results']['rate']['Rate'])
+  return float(response.get('query').get('results').get('rate').get('Rate'))
 
 
 
@@ -71,11 +71,11 @@ def getBittrexPrice2(coin1, coin2, type, q):
 #  response.status_code
 #  response.text
   response = response.json()
-  if response['success'] == True:
-    if(response['result'][type] is None):
+  if response.get('success') == True:
+    if(response.get('result').get(type) is None):
       q.put([coin2, float(0)])
     else:
-      q.put([coin2, float(response['result'][type])])
+      q.put([coin2, float(response.get('result').get(type))])
     return
 #    return float(response['result'][type])
   else:
@@ -88,19 +88,21 @@ def getBitfinexPrice(coin1, coin2, type, q):
   URL = 'https://api.bitfinex.com/v1/pubticker/' + coin2 + coin1
   headers = {'Connection': 'keep-alive'}
   try:
-    response = requests.get(URL, headers=headers, timeout=2)
+    response = requests.get(URL, headers=headers, timeout=10)
+    response = response.json()
   except:
-    q.put([coin2, 0])
+    q.put([coin2, float(0)])
     return 0;
 #  response.status_code
 #  response.text
-  response = response.json()
-  if(response[type] is None):
-    q.put([coin2, float(0)])
-  else:
-    q.put([coin2, float(response[type])])
-  return
   
+  if(response.get(type) is None):
+    q.put([coin2, float(0)])
+    print(coin1 + '/' + coin2)
+    print(response)
+  else:
+    q.put([coin2, float(response.get(type))])
+  return
 
 def getUSDKRW2(a, q):
   URL = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22USDKRW%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
@@ -112,6 +114,6 @@ def getUSDKRW2(a, q):
     return 0;
   response = response.json()
 #  print response
-  q.put(['USDT', float(response['query']['results']['rate']['Rate'])])
+  q.put(['USDT', float(response.get('query').get('results').get('rate').get('Rate'))])
   return
 #  return float(response['query']['results']['rate']['Rate'])
