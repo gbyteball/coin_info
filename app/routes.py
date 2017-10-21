@@ -28,13 +28,15 @@ def coin2():
   # coin_price
   for coindict in result:
     if coindict['code'] == 'BTC':
-      p = multiprocessing.Process(target=getBittrexPrice2, args=('USDT', coindict['code'], 'Last', q))
+      #p = multiprocessing.Process(target=getBittrexPrice2, args=('USDT', coindict['code'], 'Last', q))
+      p = multiprocessing.Process(target=getBitfinexPrice, args=('USD', 'BTC', 'last_price', q))
       procs.append(p)
       p.start()
-    #elif coindict['code'] == 'USDT':
+    elif coindict['code'] == 'USDT' or coindict['code'] == 'USD':
       #p = multiprocessing.Process(target=getUSDKRW2, args=('', q))
       #procs.append(p)
       #p.start()
+      q.put([coindict['code'], 0])
     elif coindict['place'] == 'bittrex':
       p = multiprocessing.Process(target=getBittrexPrice2, args=('BTC', coindict['code'], 'Last', q))
       procs.append(p)
