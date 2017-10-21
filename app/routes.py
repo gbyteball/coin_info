@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import sqlalchemy
 from db_example import show_tables
 from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getBitfinexPrice, getUSDKRW2
+from bitfinex import getBitfinexBalance
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
 from bittrex.bittrex import Bittrex
@@ -98,6 +99,8 @@ def coin2():
             coindict['amount'] = h['Balance']
 #            print('amount reset : ', h['Currency'], h['Balance'])
 
+
+  #print(getBitfinexBalance())
 
 
 #  pBTCWon = getCoinonePrice('BTC')
