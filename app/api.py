@@ -85,7 +85,7 @@ def getBittrexPrice2(coin1, coin2, type, q):
 
 
 def getBitfinexPrice(coin1, coin2, type, q):
-  URL = 'https://api.bitfinex.com/v1/pubticker/' + coin2 + coin1
+  URL = 'https://api.bitfinex.com/v2/ticker/t' + coin2 + coin1
   headers = {'Connection': 'keep-alive'}
   try:
     response = requests.get(URL, headers=headers, timeout=10)
@@ -96,12 +96,13 @@ def getBitfinexPrice(coin1, coin2, type, q):
 #  response.status_code
 #  response.text
   
-  if(response.get(type) is None):
-    q.put([coin2, float(0)])
-    print(coin1 + '/' + coin2)
-    print(response)
-  else:
-    q.put([coin2, float(response.get(type))])
+#  if(response.get(type) is None):
+#    q.put([coin2, float(0)])
+#    print(coin1 + '/' + coin2)
+#    print(response)
+#  else:
+#  print(response)
+  q.put([coin2, float(response[6])])
   return
 
 def getHitbtcPrice(coin1, coin2, type, q):
