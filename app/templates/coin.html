@@ -102,7 +102,7 @@
                                 {{ "{:,.0f}".format(item.coin_price*100000000) }} / 
 <!--                                ({{ "{:,.1f}".format((pXRPWon - (pUSD*pBTC*item.coin_price))/(pUSD*pBTC*item.coin_price)*100) }}%)-->
                                 {{ "{:,.0f}".format(pXRPWon) }}원
-                            {% elif item.name == 'DAO.Casino' or item.name == 'BlackMoon' %}
+                            {% elif item.name == 'BlackMoon' %}
                               {{ "{:,.0f}".format(item.satoshi) }} / {{ "{:,.2f}".format(0.00000001*item.satoshi*pETH*pBTC) }}$ / {{ "{:,.0f}".format(0.00000001*item.satoshi*pETH*pBTC*pUSD) }}원
                             {% elif item.name == 'Tezos' or item.name == 'Air' %}
                               {{ "{:,.0f}".format(item.satoshi) }} / {{ "{:,.2f}".format(0.00000001*item.satoshi*pBTC) }}$ / {{ "{:,.0f}".format(0.00000001*item.satoshi*pBTC*pUSD) }}원

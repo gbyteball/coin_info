@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import sqlalchemy
 from db_example import show_tables
-from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getBitfinexPrice, getUSDKRW2
+from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getBitfinexPrice, getHitbtcPrice, getUSDKRW2
 from bitfinex import getBitfinexBalances, getBitfinexBalance
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
@@ -46,6 +46,10 @@ def coin2():
       p = multiprocessing.Process(target=getBitfinexPrice, args=('BTC', coindict['code'], 'last_price', q))
       procs.append(p)
       p.start()
+    elif coindict['code'] == 'BET':
+      p = multiprocessing.Process(target=getHitbtcPrice, args=('ETH', coindict['code'], 'last', q))
+      procs.append(p)
+      p.start()
     else:
       q.put([coindict['code'], 0])
     
@@ -68,6 +72,9 @@ def coin2():
           pETH = coindict['coin_price']
         elif coindict['code'] == 'XRP':
           pXRP = coindict['coin_price']
+        elif coindict['code'] == 'BET':
+          print(item[0])
+          print(item[1])
 
 
 #  for coindict in result:    
@@ -141,8 +148,10 @@ def coin2():
         coindict['profit_percent'] = ((pETHWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
       elif coindict['name'] == 'Ripple':
         coindict['profit_percent'] = ((pXRPWon * coindict['amount']) - coindict['price_init'])/coindict['price_init']*100
-      elif coindict['name'] == 'DAO.Casino' or coindict['name'] == 'BlackMoon' :
-	coindict['profit_percent'] = ((coindict['satoshi']*0.00000001* coindict['amount'] * pETHWon) - coindict['price_init'])/coindict['price_init']*100
+      elif coindict['name'] == 'DAO.Casino':
+	    coindict['profit_percent'] = ((coindict['coin_price']* coindict['amount'] * pETHWon) - coindict['price_init'])/coindict['price_init']*100
+      elif coindict['name'] == 'BlackMoon':
+	    coindict['profit_percent'] = ((coindict['satoshi']*0.00000001* coindict['amount'] * pETHWon) - coindict['price_init'])/coindict['price_init']*100
       elif coindict['name'] == 'Tezos' or coindict['name'] == 'Air':
         coindict['profit_percent'] = ((coindict['satoshi']*0.00000001* coindict['amount'] * pBTCWon) - coindict['price_init'])/coindict['price_init']*100
       else:
@@ -163,7 +172,9 @@ def coin2():
       coindict['profit_value'] = int((pETHWon * coindict['amount']) - coindict['price_init'])
     elif coindict['name'] == 'Ripple':
       coindict['profit_value'] = int((pXRPWon * coindict['amount']) - coindict['price_init'])
-    elif coindict['name'] == 'DAO.Casino' or coindict['name'] == 'BlackMoon':
+    elif coindict['name'] == 'DAO.Casino':
+      coindict['profit_value'] = int((coindict['coin_price'] * coindict['amount'] * pETHWon) - coindict['price_init'])
+    elif coindict['name'] == 'BlackMoon':
       coindict['profit_value'] = int((coindict['satoshi']*0.00000001 * coindict['amount'] * pETHWon) - coindict['price_init'])
     elif coindict['name'] == 'Tezos' or coindict['name'] == 'Air':
       coindict['profit_value'] = int((coindict['satoshi']*0.00000001 * coindict['amount'] * pBTCWon) - coindict['price_init'])
