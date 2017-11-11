@@ -48,6 +48,8 @@
                 {% for item in result %}
                     {% if item.iswallet == 'Y' %}
                         <tr class='wallet'>
+                    {% elif item.place == 'bitfinex_l' %}
+                        <tr class='lending'>
                     {% else %}
                         <tr>
                     {% endif %}
