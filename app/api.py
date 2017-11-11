@@ -105,6 +105,32 @@ def getBitfinexPrice(coin1, coin2, type, q):
     q.put([coin2, float(response[6])])
   return
 
+def getBitfinexPrices(coinlist, type, q):
+  URL = 'https://api.bitfinex.com/v2/tickers?symbols=' + ','.join(coinlist)
+  headers = {'Connection': 'keep-alive'}
+  try:
+    response = requests.get(URL, headers=headers, timeout=10)
+    response = response.json()
+  except:
+    q.put([coin2, float(0)])
+    return 0;
+#  response.status_code
+#  response.text
+  
+#  print(response)
+  if(response[0] == 'error'):
+#    q.put([coin2, float(0)])
+#    print(coin1 + '/' + coin2)
+    print(response)
+  else:
+    for item in response:
+#      print(item[0][1:4])
+#      print(float(item[7]))
+#      print(' ')
+      q.put([item[0][1:4], float(item[7])])
+
+  return
+
 def getHitbtcPrice(coin1, coin2, type, q):
   URL = 'https://api.hitbtc.com/api/2/public/ticker/' + coin2 + coin1
   headers = {'Connection': 'keep-alive'}

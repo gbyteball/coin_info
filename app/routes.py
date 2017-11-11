@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import sqlalchemy
 from db_example import show_tables
-from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getBitfinexPrice, getHitbtcPrice, getUSDKRW2
+from api import getBittrexPrice, getUSDKRW, getBittrexPrice2, getBitfinexPrice, getBitfinexPrices, getHitbtcPrice, getUSDKRW2
 from bitfinex import getBitfinexBalances, getBitfinexBalance
 from gevent.wsgi import WSGIServer
 from collections import defaultdict
@@ -26,13 +26,17 @@ def coin2():
   multiThreadResult = list()
   q = multiprocessing.Queue()
 
+  bitfinexPriceCoinSymbolList = []
+
   # coin_price
   for coindict in result:
     if coindict['code'] == 'BTC':
       #p = multiprocessing.Process(target=getBittrexPrice2, args=('USDT', coindict['code'], 'Last', q))
-      p = multiprocessing.Process(target=getBitfinexPrice, args=('USD', 'BTC', 'last_price', q))
-      procs.append(p)
-      p.start()
+#      p = multiprocessing.Process(target=getBitfinexPrice, args=('USD', 'BTC', 'last_price', q))
+#      procs.append(p)
+      if('tBTCUSD' not in bitfinexPriceCoinSymbolList):
+        bitfinexPriceCoinSymbolList.append('tBTCUSD')
+#      p.start()
     elif coindict['code'] == 'USDT' or coindict['code'] == 'USD':
       #p = multiprocessing.Process(target=getUSDKRW2, args=('', q))
       #procs.append(p)
@@ -43,9 +47,11 @@ def coin2():
       procs.append(p)
       p.start()
     elif coindict['place'] == 'bitfinex' or coindict['place'] == 'bitfinex_l':
-      p = multiprocessing.Process(target=getBitfinexPrice, args=('BTC', coindict['code'], 'last_price', q))
-      procs.append(p)
-      p.start()
+#      p = multiprocessing.Process(target=getBitfinexPrice, args=('BTC', coindict['code'], 'last_price', q))
+#      procs.append(p)
+      if(('t' + coindict['code'] + 'BTC') not in bitfinexPriceCoinSymbolList):
+        bitfinexPriceCoinSymbolList.append('t' + coindict['code'] + 'BTC')
+#      p.start()
     elif coindict['code'] == 'BET':
       p = multiprocessing.Process(target=getHitbtcPrice, args=('ETH', coindict['code'], 'last', q))
       procs.append(p)
@@ -55,6 +61,9 @@ def coin2():
     
   for p in procs:
     p.join()
+
+  getBitfinexPrices(bitfinexPriceCoinSymbolList, 'last', q)
+
 
   while not q.empty():
     item = q.get()
