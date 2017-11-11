@@ -96,13 +96,13 @@ def getBitfinexPrice(coin1, coin2, type, q):
 #  response.status_code
 #  response.text
   
-#  if(response.get(type) is None):
-#    q.put([coin2, float(0)])
+  if(response[0] == 'error'):
+    q.put([coin2, float(0)])
 #    print(coin1 + '/' + coin2)
 #    print(response)
-#  else:
+  else:
 #  print(response)
-  q.put([coin2, float(response[6])])
+    q.put([coin2, float(response[6])])
   return
 
 def getHitbtcPrice(coin1, coin2, type, q):
@@ -119,8 +119,8 @@ def getHitbtcPrice(coin1, coin2, type, q):
   
   if(response.get(type) is None):
     q.put([coin2, float(0)])
-    print(coin1 + '/' + coin2)
-    print(response)
+#    print(coin1 + '/' + coin2)
+#    print(response)
   else:
 #    print(response)
     q.put([coin2, float(response.get(type))])

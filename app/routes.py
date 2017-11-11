@@ -72,9 +72,9 @@ def coin2():
           pETH = coindict['coin_price']
         elif coindict['code'] == 'XRP':
           pXRP = coindict['coin_price']
-        elif coindict['code'] == 'BET':
-          print(item[0])
-          print(item[1])
+#        elif coindict['code'] == 'BET':
+#          print(item[0])
+#          print(item[1])
 
 
 #  for coindict in result:    
